@@ -6,6 +6,7 @@ import java.util.List;
 import javax.ejb.Stateless;
 import javax.persistence.EntityManager;
 import javax.persistence.PersistenceContext;
+import javax.persistence.TypedQuery;
 import javax.ws.rs.Consumes;
 import javax.ws.rs.DELETE;
 import javax.ws.rs.GET;
@@ -22,6 +23,7 @@ import javax.ws.rs.core.UriInfo;
 
 import br.com.linx.model.Url;
 import br.com.linx.model.Usuario;
+import br.com.linx.model.rest.Estatistica;
 import br.com.linx.model.rest.Usuarios;
 import br.com.linx.util.ShortURL;
 
@@ -107,6 +109,39 @@ public class UsuarioService {
 		url = this.entityManager.merge(url);
 		
 		return Response.status(Status.CREATED).entity(url).build();
-	}	
+	}
+	
+	/**
+	 * Retorna estatísticas das urls de um usuário
+	 * 
+	 * @return Response
+	 */
+	@GET
+	@Path("/{id}/stats")
+	public Response findStatsByUser(@PathParam("id") String idUsuario) {
+		Usuario usuario = this.entityManager.find(Usuario.class, idUsuario);
+		
+		if (usuario == null) {
+			return Response.status(Status.NOT_FOUND).build();
+		}
+		
+		TypedQuery<Long> hitsQuery = this.entityManager.createQuery(
+				"select sum(u.hits) from Url u where u.usuario=:usuario", Long.class).setParameter("usuario", usuario);		
+		Long hits = hitsQuery.getSingleResult();
+		
+		TypedQuery<Long> urlCountQuery = this.entityManager.createQuery(
+				"select count(u) from Url u where u.usuario=:usuario", Long.class).setParameter("usuario", usuario);		
+		Long urlCount = urlCountQuery.getSingleResult();
+		
+		TypedQuery<Url> topUrlsQuery = this.entityManager
+				.createQuery(
+						"select u from Url u where u.usuario=:usuario order by u.hits desc",
+						Url.class).setParameter("usuario", usuario).setMaxResults(10);
+		List<Url> topUrls = topUrlsQuery.getResultList();
+		
+		Estatistica estatistica = new Estatistica(hits, urlCount, topUrls);
+		
+		return Response.ok(estatistica).build();
+	}
 	
 }

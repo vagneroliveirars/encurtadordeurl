@@ -43,6 +43,14 @@ public class UrlService {
 		Url url = this.entityManager.find(Url.class, id);
 		
 		if (url != null) {
+			// Incrementa os hits da url
+			Long hits = url.getHits();
+			hits++;
+			url.setHits(hits);
+			
+			url = this.entityManager.merge(url);
+			
+			// Redireciona
 			try {
 				URI location = new URI(url.getUrl());
 				return Response.status(Status.MOVED_PERMANENTLY).location(location).build();

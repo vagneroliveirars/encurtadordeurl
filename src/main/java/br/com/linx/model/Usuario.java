@@ -19,7 +19,7 @@ public class Usuario {
 	@Id
 	private String id;
 	
-	@OneToMany(cascade = {CascadeType.ALL}, orphanRemoval = true)
+	@OneToMany(cascade = {CascadeType.ALL})
 	@XmlTransient
 	private List<Url> urls;
 	

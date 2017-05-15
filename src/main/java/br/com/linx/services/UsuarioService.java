@@ -20,8 +20,10 @@ import javax.ws.rs.core.Response.Status;
 import javax.ws.rs.core.UriBuilder;
 import javax.ws.rs.core.UriInfo;
 
+import br.com.linx.model.Url;
 import br.com.linx.model.Usuario;
 import br.com.linx.model.rest.Usuarios;
+import br.com.linx.util.ShortURL;
 
 @Stateless
 @Path("/users")
@@ -42,7 +44,8 @@ public class UsuarioService {
 	}
 	
 	@GET
-	public Response find(@PathParam("id") Long id) {
+	@Path("/{id}")
+	public Response find(@PathParam("id") String id) {
 		Usuario usuario = this.entityManager.find(Usuario.class, id);
 		
 		if (usuario != null) {
@@ -54,6 +57,10 @@ public class UsuarioService {
 	
 	@POST
 	public Response create(@Context UriInfo uriInfo, Usuario usuario) {
+		if (this.entityManager.find(Usuario.class, usuario.getId()) != null) {
+			return Response.status(Status.CONFLICT).build();
+		}
+		
 		this.entityManager.persist(usuario);
 		
 		UriBuilder uriBuilder = uriInfo.getAbsolutePathBuilder();
@@ -64,7 +71,7 @@ public class UsuarioService {
 	
 	@DELETE
 	@Path("/{id}")
-	public Response delete(@PathParam("id") Long id) {
+	public Response delete(@PathParam("id") String id) {
 		Usuario usuario = this.entityManager.find(Usuario.class, id);
 		
 		if (usuario == null) {
@@ -75,5 +82,31 @@ public class UsuarioService {
 		
 		return Response.noContent().build();
 	}
+	
+	@POST
+	@Path("/{id}/urls")
+	public Response createUrl(@Context UriInfo uriInfo, @PathParam("id") String idUsuario, Url url) {
+		Usuario usuario = this.entityManager.find(Usuario.class, idUsuario);
+		
+		if (usuario == null) {
+			return Response.status(Status.NOT_FOUND).build();
+		}
+		
+		url.setUsuario(usuario);
+		url.setHits(0l);
+		
+		url = this.entityManager.merge(url);
+		
+		String shortUrl = ShortURL.encode(url.getId().intValue()); 
+		
+		UriBuilder uriBuilder = uriInfo.getBaseUriBuilder();
+		URI location = uriBuilder.path("/{shortUrl}").build(shortUrl);
+		
+		url.setShortUrl(location.toString());
+		
+		url = this.entityManager.merge(url);
+		
+		return Response.status(Status.CREATED).entity(url).build();
+	}	
 	
 }

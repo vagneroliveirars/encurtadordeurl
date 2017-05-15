@@ -4,9 +4,11 @@ import javax.persistence.Entity;
 import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
+import javax.persistence.ManyToOne;
 import javax.xml.bind.annotation.XmlAccessType;
 import javax.xml.bind.annotation.XmlAccessorType;
 import javax.xml.bind.annotation.XmlRootElement;
+import javax.xml.bind.annotation.XmlTransient;
 
 @XmlRootElement
 @XmlAccessorType(XmlAccessType.FIELD)
@@ -23,7 +25,17 @@ public class Url {
 
 	private String shortUrl;
 	
+	@ManyToOne
+	@XmlTransient
+	private Usuario usuario;
+	
 	public Url() {}
+	
+	public Url(Long hits, String url, String shortUrl) {
+		this.hits = hits;
+		this.url = url;
+		this.shortUrl = shortUrl;
+	}
 
 	public Long getId() {
 		return id;
@@ -41,6 +53,14 @@ public class Url {
 		this.hits = hits;
 	}
 
+	public Usuario getUsuario() {
+		return usuario;
+	}
+
+	public void setUsuario(Usuario usuario) {
+		this.usuario = usuario;
+	}
+
 	public String getUrl() {
 		return url;
 	}
@@ -56,5 +76,5 @@ public class Url {
 	public void setShortUrl(String shortUrl) {
 		this.shortUrl = shortUrl;
 	}
-
+	
 }

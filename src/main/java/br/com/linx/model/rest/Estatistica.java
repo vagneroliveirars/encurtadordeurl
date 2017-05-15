@@ -8,6 +8,12 @@ import javax.xml.bind.annotation.XmlRootElement;
 
 import br.com.linx.model.Url;
 
+/**
+ * Classe que representa uma estatística
+ * 
+ * @author vagner
+ *
+ */
 @XmlAccessorType(XmlAccessType.FIELD)
 @XmlRootElement
 public class Estatistica {

@@ -11,6 +11,12 @@ import javax.xml.bind.annotation.XmlAccessorType;
 import javax.xml.bind.annotation.XmlRootElement;
 import javax.xml.bind.annotation.XmlTransient;
 
+/**
+ * Classe que representa um usuário
+ * 
+ * @author vagner
+ *
+ */
 @XmlAccessorType(XmlAccessType.FIELD)
 @XmlRootElement
 @Entity

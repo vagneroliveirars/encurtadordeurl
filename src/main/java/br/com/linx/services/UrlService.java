@@ -2,7 +2,6 @@ package br.com.linx.services;
 
 import java.net.URI;
 import java.net.URISyntaxException;
-import java.util.List;
 
 import javax.ejb.Stateless;
 import javax.persistence.EntityManager;
@@ -18,8 +17,13 @@ import javax.ws.rs.core.Response;
 import javax.ws.rs.core.Response.Status;
 
 import br.com.linx.model.Url;
-import br.com.linx.model.rest.Urls;
 
+/**
+ * Serviço REST para URL
+ * 
+ * @author vagner
+ *
+ */
 @Stateless
 @Path("/urls")
 @Consumes({MediaType.APPLICATION_JSON})
@@ -29,14 +33,12 @@ public class UrlService {
 	@PersistenceContext
 	private EntityManager entityManager;
 	
-	@GET
-	public Response findAll() {
-		List<Url> urls = this.entityManager
-				.createQuery("select u from Url u", Url.class).getResultList();
-		
-		return Response.ok(new Urls(urls)).build();
-	}
-	
+	/**
+	 * Retorna um 301 redirect para o endereço original da URL
+	 * 
+	 * @param id
+	 * @return Response
+	 */
 	@GET
 	@Path("/{id}")
 	public Response find(@PathParam("id") Long id) {
@@ -63,6 +65,12 @@ public class UrlService {
 		return Response.status(Status.NOT_FOUND).build();
 	}
 	
+	/**
+	 * Apaga uma URL do sistema
+	 * 
+	 * @param id
+	 * @return Response
+	 */
 	@DELETE
 	@Path("/{id}")
 	public Response delete(@PathParam("id") Long id) {

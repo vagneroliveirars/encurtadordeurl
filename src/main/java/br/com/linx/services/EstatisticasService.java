@@ -17,6 +17,12 @@ import javax.ws.rs.core.Response.Status;
 import br.com.linx.model.Url;
 import br.com.linx.model.rest.Estatistica;
 
+/**
+ * Serviço REST para estatísticas
+ * 
+ * @author vagner
+ *
+ */
 @Stateless
 @Path("/stats")
 @Consumes({MediaType.APPLICATION_JSON})

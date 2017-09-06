@@ -1,0 +1,29 @@
+<enunciate xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="http://enunciate.webcohesion.com/schemas/enunciate-2.0.0-M.4.xsd">
+
+  <title>If You Wanna Be Cool API</title>
+  <description package="br.com.linx.services"/>
+  <copyright>IfYouWannaBeCool.com</copyright>
+
+  <application root="http://localhost:8080/encurtadordeurl"/>
+
+  <namespaces>
+    <namespace id="api" uri="http://localhost:8080/encurtadordeurl/"/>
+    <namespace id="urls" uri="http://localhost:8080/encurtadordeurl/urls"/>
+    <namespace id="users" uri="http://localhost:8080/encurtadordeurl/users"/>
+    <namespace id="stats" uri="http://localhost:8080/encurtadordeurl/stats"/>
+  </namespaces>
+
+  <modules>
+	<!-- 
+    <docs>
+		<download file="LICENSE" name="Apache II" description="The license governing this API" showLink="true"/>
+    </docs>
+    -->
+    <java-xml-client>
+      <package-conversions>
+        <convert from="br.com.linx" to="br.com.linx.client"/>
+      </package-conversions>
+    </java-xml-client>
+  </modules>
+
+</enunciate>

@@ -12,5 +12,25 @@
 		<servlet-name>br.com.linx.services.ApplicationJAXRS</servlet-name>
 		<url-pattern>/*</url-pattern>
 	</servlet-mapping>
+
+	<filter>
+		<filter-name>idl-filter</filter-name>
+		<filter-class>com.webcohesion.enunciate.rt.IDLFilter</filter-class>
+	</filter>
+
+	<filter-mapping>
+		<filter-name>idl-filter</filter-name>
+		<url-pattern>*.wsdl</url-pattern>
+	</filter-mapping>
+
+	<filter-mapping>
+		<filter-name>idl-filter</filter-name>
+		<url-pattern>*.wadl</url-pattern>
+	</filter-mapping>
 	
+	<filter-mapping>
+		<filter-name>idl-filter</filter-name>
+		<url-pattern>*.html</url-pattern>
+	</filter-mapping>
+
 </web-app>
